@@ -1,75 +1,63 @@
 import {Component} from '@angular/core';
-import {HTTP_PROVIDERS} from '@angular/http';
-import {InputText,DataTable,Button,Dialog,Column,Header,Footer} from 'primeng/primeng';
-import {Car} from './cars/car';
-import {CarService} from './cars/carservice';
+import {Tree} from 'primeng/primeng';
 
 @Component({
-	templateUrl: 'app/app.component.html',
+	templateUrl: './app/app.component.html',
 	selector: 'my-app',
-    directives: [InputText,DataTable,Button,Dialog,Column,Header,Footer],
-	providers: [HTTP_PROVIDERS,CarService]
+    directives: [Tree ]
 })
 export class AppComponent {
 
-	displayDialog: boolean;
+    
 
-    car: Car = new PrimeCar();
+    theData =  [
+            {
+                "label": "Documents",
+                "data": "Documents Folder",
+                "expandedIcon": "fa-folder-open",
+                "collapsedIcon": "fa-folder",
+                "children": [{
+                        "label": "Work",
+                        "data": "Work Folder",
+                        "expandedIcon": "fa-folder-open",
+                        "collapsedIcon": "fa-folder",
+                        "children": [{"label": "Expenses.doc", "icon": "fa-file-word-o", "data": "Expenses Document"}, {"label": "Resume.doc", "icon": "fa-file-word-o", "data": "Resume Document"}]
+                    },
+                    {
+                        "label": "Home",
+                        "data": "Home Folder",
+                        "expandedIcon": "fa-folder-open",
+                        "collapsedIcon": "fa-folder",
+                        "children": [{"label": "Invoices.txt", "icon": "fa-file-word-o", "data": "Invoices for this month"}]
+                    }]
+            },
+            {
+                "label": "Pictures",
+                "data": "Pictures Folder",
+                "expandedIcon": "fa-folder-open",
+                "collapsedIcon": "fa-folder",
+                "children": [
+                    {"label": "barcelona.jpg", "icon": "fa-file-image-o", "data": "Barcelona Photo"},
+                    {"label": "logo.jpg", "icon": "fa-file-image-o", "data": "PrimeFaces Logo"},
+                    {"label": "primeui.png", "icon": "fa-file-image-o", "data": "PrimeUI Logo"}]
+            },
+            {
+                "label": "Movies",
+                "data": "Movies Folder",
+                "expandedIcon": "fa-folder-open",
+                "collapsedIcon": "fa-folder",
+                "children": [{
+                        "label": "Al Pacino",
+                        "data": "Pacino Movies",
+                        "children": [{"label": "Scarface", "icon": "fa-file-video-o", "data": "Scarface Movie"}, {"label": "Serpico", "icon": "fa-file-video-o", "data": "Serpico Movie"}]
+                    },
+                    {
+                        "label": "Robert De Niro",
+                        "data": "De Niro Movies",
+                        "children": [{"label": "Goodfellas", "icon": "fa-file-video-o", "data": "Goodfellas Movie"}, {"label": "Untouchables", "icon": "fa-file-video-o", "data": "Untouchables Movie"}]
+                    }]
+            }
+        ];
 
-    selectedCar: Car;
 
-    newCar: boolean;
-
-    cars: Car[];
-
-    constructor(private carService: CarService) { }
-
-    ngOnInit() {
-        this.carService.getCarsMedium().then(cars => this.cars = cars);
-    }
-
-    showDialogToAdd() {
-        this.newCar = true;
-        this.car = new PrimeCar();
-        this.displayDialog = true;
-    }
-
-    save() {
-        if(this.newCar)
-            this.cars.push(this.car);
-        else
-            this.cars[this.findSelectedCarIndex()] = this.car;
-
-        this.car = null;
-        this.displayDialog = false;
-    }
-
-    delete() {
-        this.cars.splice(this.findSelectedCarIndex(), 1);
-        this.car = null;
-        this.displayDialog = false;
-    }
-
-    onRowSelect(event) {
-        this.newCar = false;
-        this.car = this.cloneCar(event.data);
-        this.displayDialog = true;
-    }
-
-    cloneCar(c: Car): Car {
-        let car = new PrimeCar();
-        for(let prop in c) {
-            car[prop] = c[prop];
-        }
-        return car;
-    }
-
-    findSelectedCarIndex(): number {
-        return this.cars.indexOf(this.selectedCar);
-    }
-}
-
-class PrimeCar implements Car {
-
-    constructor(public vin?, public year?, public brand?, public color?) {}
 }
